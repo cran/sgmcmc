@@ -1,9 +1,10 @@
 ## ----message=FALSE-------------------------------------------------------
 library(sgmcmc)
-# Load data from package
-data("covertype")
+# Download and load covertype dataset
+covertype = getDataset("covertype")
 
 ## ------------------------------------------------------------------------
+set.seed(13)
 testObservations = sample(nrow(covertype), 10^4)
 testSet = covertype[testObservations,]
 X = covertype[-c(testObservations),2:ncol(covertype)]
@@ -29,15 +30,17 @@ logPrior = function(params) {
 }
 
 ## ------------------------------------------------------------------------
-stepsizesMCMC = list("beta" = 2e-5, "bias" = 2e-5)
-stepsizesOptimization = 1e-1
+stepsizesMCMC = list("beta" = 5e-6, "bias" = 5e-6)
+stepsizesOptimization = 5e-6
 
-## ----eval=FALSE----------------------------------------------------------
-#  output = sgldcv(logLik, dataset, params, stepsizesMCMC, stepsizesOptimization, logPrior = logPrior, minibatchSize = 500, nIters = 11000 )
+## ---- eval = FALSE-------------------------------------------------------
+#  output = sgldcv(logLik, dataset, params, stepsizesMCMC, stepsizesOptimization, logPrior = logPrior,
+#          minibatchSize = 500, nIters = 11000, verbose = FALSE, seed = 13 )
 
 ## ----echo=FALSE----------------------------------------------------------
 tryCatch({
-    output = sgldcv(logLik, dataset, params, stepsizesMCMC, stepsizesOptimization, logPrior = logPrior, minibatchSize = 500, nIters = 11000 ) 
+output = sgldcv(logLik, dataset, params, stepsizesMCMC, stepsizesOptimization, logPrior = logPrior, 
+        minibatchSize = 500, nIters = 11000, verbose = FALSE, seed = 13 ) 
 }, error = function (e) { 
     writeLines("Not all tensorflow dependencies are met so skipping this...")
     writeLines("Try running tensorflow::install_tensorflow().")
@@ -50,8 +53,8 @@ tryCatch({
 #  output$bias = output$bias[-c(1:1000)]
 #  output$beta = output$beta[-c(1:1000),,]
 #  iterations = seq(from = 1, to = 10^4, by = 10)
-#  avLogPred = rep(0, length(iterations))
-#  # Calculate log predictive every 10 iterations
+#  logLoss = rep(0, length(iterations))
+#  # Calculate log loss every 10 iterations
 #  for ( iter in 1:length(iterations) ) {
 #      j = iterations[iter]
 #      # Get parameters at iteration j
@@ -60,16 +63,16 @@ tryCatch({
 #      for ( i in 1:length(yTest) ) {
 #          pihat_ij = 1 / (1 + exp(- beta0_j - sum(XTest[i,] * beta_j)))
 #          y_i = yTest[i]
-#          # Calculate log predictive at current test set point
+#          # Calculate log loss at current test set point
 #          LogPred_curr = - (y_i * log(pihat_ij) + (1 - y_i) * log(1 - pihat_ij))
-#          avLogPred[iter] = avLogPred[iter] + 1 / length(yTest) * LogPred_curr
+#          logLoss[iter] = logLoss[iter] + 1 / length(yTest) * LogPred_curr
 #      }
 #  }
 #  library(ggplot2)
-#  plotFrame = data.frame("iteration" = iterations, "logPredictive" = avLogPred)
-#  ggplot(plotFrame, aes(x = iteration, y = logPredictive)) +
+#  plotFrame = data.frame("iteration" = iterations, "logLoss" = logLoss)
+#  ggplot(plotFrame, aes(x = iteration, y = logLoss)) +
 #      geom_line() +
-#      ylab("Average log predictive of test set")
+#      ylab("Log loss of test set")
 
 ## ----echo=FALSE----------------------------------------------------------
 tryCatch({
@@ -80,8 +83,8 @@ tryCatch({
     output$bias = output$bias[-c(1:1000)]
     output$beta = output$beta[-c(1:1000),,]
     iterations = seq(from = 1, to = 10^4, by = 10)
-    avLogPred = rep(0, length(iterations))
-    # Calculate log predictive every 10 iterations
+    logLoss = rep(0, length(iterations))
+    # Calculate log loss every 10 iterations
     for ( iter in 1:length(iterations) ) {
         j = iterations[iter]
         # Get parameters at iteration j
@@ -90,16 +93,16 @@ tryCatch({
         for ( i in 1:length(yTest) ) {
             pihat_ij = 1 / (1 + exp(- beta0_j - sum(XTest[i,] * beta_j)))
             y_i = yTest[i]
-            # Calculate log predictive at current test set point
+            # Calculate log loss at current test set point
             LogPred_curr = - (y_i * log(pihat_ij) + (1 - y_i) * log(1 - pihat_ij))
-            avLogPred[iter] = avLogPred[iter] + 1 / length(yTest) * LogPred_curr
+            logLoss[iter] = logLoss[iter] + 1 / length(yTest) * LogPred_curr
         }
     }
     library(ggplot2)
-    plotFrame = data.frame("iteration" = iterations, "logPredictive" = avLogPred)
-    ggplot(plotFrame, aes(x = iteration, y = logPredictive)) +
+    plotFrame = data.frame("iteration" = iterations, "logLoss" = logLoss)
+    ggplot(plotFrame, aes(x = iteration, y = logLoss)) +
         geom_line() +
-        ylab("Average log predictive of test set")
+        ylab("Log loss of test set")
 }, error = function (e) { 
     writeLines("Not all tensorflow dependencies are met so skipping this...")
     writeLines("Try running tensorflow::install_tensorflow().")

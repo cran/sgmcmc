@@ -6,6 +6,7 @@ N = 10^4
 # Set theta to be 0 and simulate the data
 theta = c( 0, 0 )
 Sigma = diag(2)
+set.seed(13)
 X = mvrnorm( N, theta, Sigma )
 dataset = list("X" = X)
 
@@ -34,11 +35,13 @@ stepsize = list( "theta" = 1e-5 )
 n = 100
 
 ## ----eval=FALSE----------------------------------------------------------
-#  chains = sgld( logLik, dataset, params, stepsize, logPrior = logPrior, minibatchSize = n)
+#  chains = sgld( logLik, dataset, params, stepsize, logPrior = logPrior, minibatchSize = n,
+#                verbose = FALSE, seed = 13 )
 
 ## ----echo=FALSE----------------------------------------------------------
 tryCatch({
-    chains = sgld( logLik, dataset, params, stepsize, logPrior = logPrior, minibatchSize = n)
+chains = sgld( logLik, dataset, params, stepsize, logPrior = logPrior, minibatchSize = n, 
+              verbose = FALSE, seed = 13 )
 }, error = function (e) { 
     writeLines("Not all tensorflow dependencies are met so skipping this...")
     writeLines("Try running tensorflow::install_tensorflow().")

@@ -7,6 +7,7 @@ N = 10^4
 theta1 = c( 0, 0 )
 theta2 = c( 0.1, 0.1 )
 # Allocate observations to each component
+set.seed(13)
 z = sample( 2, N, replace = TRUE, prob = c( 0.5, 0.5 ) )
 # Predeclare data matrix
 X = matrix( rep( NA, 2*N ), ncol = 2 )
@@ -52,14 +53,16 @@ logPrior = function( params ) {
 }
 
 ## ------------------------------------------------------------------------
-stepsize = list( "theta1" = 5e-6, "theta2" = 5e-6 )
+stepsize = list( "theta1" = 2e-5, "theta2" = 2e-5 )
 
 ## ----eval=FALSE----------------------------------------------------------
-#  chains = sghmc( logLik, dataset, params, stepsize, logPrior = logPrior, nIters = 11000 )
+#  chains = sghmc( logLik, dataset, params, stepsize, logPrior = logPrior, nIters = 11000,
+#          verbose = FALSE, seed = 13 )
 
 ## ----echo=FALSE----------------------------------------------------------
 tryCatch({
-    chains = sghmc( logLik, dataset, params, stepsize, logPrior = logPrior, nIters = 11000 )
+    chains = sghmc( logLik, dataset, params, stepsize, logPrior = logPrior, nIters = 11000, 
+            verbose = FALSE, seed = 13 )
 }, error = function (e) { 
     writeLines("Not all tensorflow dependencies are met so skipping this...")
     writeLines("Try running tensorflow::install_tensorflow().")

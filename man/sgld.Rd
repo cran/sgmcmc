@@ -5,7 +5,7 @@
 \title{Stochastic Gradient Langevin Dynamics}
 \usage{
 sgld(logLik, dataset, params, stepsize, logPrior = NULL,
-  minibatchSize = 0.01, nIters = 10^4L, verbose = TRUE)
+  minibatchSize = 0.01, nIters = 10^4L, verbose = TRUE, seed = NULL)
 }
 \arguments{
 \item{logLik}{function which takes parameters and dataset 
@@ -33,6 +33,9 @@ either as proportion of dataset size (if between 0 and 1) or actual magnitude (i
 \item{nIters}{optional. Default 10^4L. Integer specifying number of iterations to perform.}
 
 \item{verbose}{optional. Default TRUE. Boolean specifying whether to print algorithm progress}
+
+\item{seed}{optional. Default NULL. Numeric seed for random number generation. The default
+does not declare a seed for the TensorFlow session.}
 }
 \value{
 Returns list of arrays for each parameter containing the MCMC chain.
@@ -41,7 +44,7 @@ Returns list of arrays for each parameter containing the MCMC chain.
 \description{
 Simulates from the posterior defined by the functions logLik and logPrior using
  stochastic gradient Langevin Dynamics. The function uses TensorFlow, so needs
- Tensorflow for python installed.
+ TensorFlow for python installed.
 }
 \examples{
 \dontrun{
@@ -54,6 +57,7 @@ logLik = function(params, dataset) {
 }
 stepsize = list("theta" = 1e-4)
 output = sgld(logLik, dataset, params, stepsize)
+# For more examples see vignettes
 }
 }
 \references{

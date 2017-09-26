@@ -6,7 +6,7 @@
 \usage{
 sghmc(logLik, dataset, params, stepsize, logPrior = NULL,
   minibatchSize = 0.01, alpha = 0.01, L = 5L, nIters = 10^4L,
-  verbose = TRUE)
+  verbose = TRUE, seed = NULL)
 }
 \arguments{
 \item{logLik}{function which takes parameters and dataset 
@@ -19,8 +19,8 @@ The names in the list should correspond to those referred to in the logLik and l
 \item{params}{list of numeric R arrays which define the starting point of each parameter.
 The names in the list should correspond to those referred to in the logLik and logPrior functions}
 
-\item{stepsize}{list of numeric values corresponding to the SGHMC stepsizes for each parameter
-(\eqn{\eta} in the original paper). The names in the list should correspond to those in params.
+\item{stepsize}{list of numeric values corresponding to the SGLD stepsizes for each parameter
+The names in the list should correspond to those in params.
 Alternatively specify a single numeric value to use that stepsize for all parameters.}
 
 \item{logPrior}{optional. Default uninformative improper prior.
@@ -43,6 +43,9 @@ as defined in the main reference.}
 \item{nIters}{optional. Default 10^4L. Integer specifying number of iterations to perform.}
 
 \item{verbose}{optional. Default TRUE. Boolean specifying whether to print algorithm progress}
+
+\item{seed}{optional. Default NULL. Numeric seed for random number generation. The default
+does not declare a seed for the TensorFlow session.}
 }
 \value{
 Returns list of arrays for each parameter containing the MCMC chain.
@@ -51,7 +54,7 @@ Returns list of arrays for each parameter containing the MCMC chain.
 \description{
 Simulates from the posterior defined by the functions logLik and logPrior using
  stochastic gradient Hamiltonian Monte Carlo. The function uses TensorFlow, so needs
- Tensorflow for python installed. Currently we use the approximation \eqn{\hat \beta = 0},
+ TensorFlow for python installed. Currently we use the approximation \eqn{\hat \beta = 0},
  as used in the simulations by the original reference. 
  This will be changed in future implementations.
 }
@@ -66,6 +69,7 @@ logLik = function(params, dataset) {
 }
 stepsize = list("theta" = 1e-5)
 output = sghmc(logLik, dataset, params, stepsize)
+# For more examples see vignettes
 }
 }
 \references{

@@ -5,7 +5,8 @@
 \title{Stochastic Gradient Nose Hoover Thermostat}
 \usage{
 sgnht(logLik, dataset, params, stepsize, logPrior = NULL,
-  minibatchSize = 0.01, a = 0.01, nIters = 10^4L, verbose = TRUE)
+  minibatchSize = 0.01, a = 0.01, nIters = 10^4L, verbose = TRUE,
+  seed = NULL)
 }
 \arguments{
 \item{logLik}{function which takes parameters and dataset 
@@ -18,8 +19,7 @@ The names in the list should correspond to those referred to in the logLik and l
 \item{params}{list of numeric R arrays which define the starting point of each parameter.
 The names in the list should correspond to those referred to in the logLik and logPrior functions}
 
-\item{stepsize}{list of numeric values corresponding to the SGNHT stepsizes for each parameter
-(\eqn{\eta} in the original paper, Algorithm 2). 
+\item{stepsize}{list of numeric values corresponding to the SGLD stepsizes for each parameter
 The names in the list should correspond to those in params.
 Alternatively specify a single numeric value to use that stepsize for all parameters.}
 
@@ -39,6 +39,9 @@ Alternatively specify a single float to specify that value for all parameters.}
 \item{nIters}{optional. Default 10^4L. Integer specifying number of iterations to perform.}
 
 \item{verbose}{optional. Default TRUE. Boolean specifying whether to print algorithm progress}
+
+\item{seed}{optional. Default NULL. Numeric seed for random number generation. The default
+does not declare a seed for the TensorFlow session.}
 }
 \value{
 Returns list of arrays for each parameter containing the MCMC chain.
@@ -63,6 +66,7 @@ logLik = function(params, dataset) {
 }
 stepsize = list("theta" = 5e-6)
 output = sgnht(logLik, dataset, params, stepsize)
+# For more examples see vignettes
 }
 }
 \references{
