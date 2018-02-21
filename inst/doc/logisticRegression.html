@@ -1,155 +1,309 @@
 <!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="pandoc" />
+<title></title>
 
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
 
-<meta name="author" content="Jack Baker" />
-
-
-<title>Worked Example: Logistic Regression</title>
-
-
-
-<style type="text/css">code{white-space: pre;}</style>
+<!-- Styles for R syntax highlighter -->
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
 </style>
 
 
 
-<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
-
 </head>
 
 <body>
-
-
-
-
-<h1 class="title toc-ignore">Worked Example: Logistic Regression</h1>
-<h4 class="author"><em>Jack Baker</em></h4>
-
-
-
-<p>In this example we use the package to infer the bias and coefficients in a logistic regression model using <a href="https://arxiv.org/pdf/1706.05439.pdf">stochastic gradient Langevin Dynamics with control variates</a>. We assume we have data <span class="math inline">\(\mathbf x_1, \dots, \mathbf x_N\)</span> and response variables <span class="math inline">\(y_1, \dots, y_N\)</span> with likelihood <span class="math display">\[
+<p>In this example we use the package to infer the bias and coefficients in a logistic regression model using <a href="https://arxiv.org/pdf/1706.05439.pdf">stochastic gradient Langevin Dynamics with control variates</a>. We assume we have data \(\mathbf x_1, \dots, \mathbf x_N\) and response variables \(y_1, \dots, y_N\) with likelihood
+\[
     p(\mathbf X, \mathbf y | \beta, \beta_0 ) = \prod_{i=1}^N \left[ \frac{1}{1+e^{-\beta_0 + \mathbf x_i \beta}} \right]^{y_i} \left[ 1 - \frac{1}{1+e^{-\beta_0 + \mathbf x_i \beta}} \right]^{1-y_i}
-\]</span></p>
-<p>First let’s load in the data, we will use the <a href="https://archive.ics.uci.edu/ml/datasets/covertype">cover type dataset</a> commonly used to benchmark classification models. We use the <a href="https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/binary.html">dataset from LIBSVM</a>, which transforms the problem from multiclass to binary. The covertype dataset can be downloaded using the <code>sgmcmc</code> function <code>getDataset</code> as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sgmcmc)
-<span class="co"># Download and load covertype dataset</span>
-covertype =<span class="st"> </span><span class="kw">getDataset</span>(<span class="st">&quot;covertype&quot;</span>)</code></pre></div>
-<p>First we’ll remove about 10000 observations from the original dataset to form a test set, this will be used to check the validity of the algorithm. Then we’ll separate out the response variable <code>y</code> and the explanatory variables <code>X</code>. The response variable is the first column in the dataset.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">13</span>)
-testObservations =<span class="st"> </span><span class="kw">sample</span>(<span class="kw">nrow</span>(covertype), <span class="dv">10</span>^<span class="dv">4</span>)
-testSet =<span class="st"> </span>covertype[testObservations,]
-X =<span class="st"> </span>covertype[-<span class="kw">c</span>(testObservations),<span class="dv">2</span>:<span class="kw">ncol</span>(covertype)]
-y =<span class="st"> </span>covertype[-<span class="kw">c</span>(testObservations),<span class="dv">1</span>]
-dataset =<span class="st"> </span><span class="kw">list</span>( <span class="st">&quot;X&quot;</span> =<span class="st"> </span>X, <span class="st">&quot;y&quot;</span> =<span class="st"> </span>y )</code></pre></div>
-<p>In the last line we defined the dataset as it will be input to the relevant <code>sgmcmc</code> function. A lot of the inputs to functions in <code>sgmcmc</code> are defined as lists. This improves flexibility by enabling models to be specified with multiple parameters, datasets and allows separate tuning constants to be set for each parameter. We assume that observations are always accessed on the first dimension of each object, i.e. the point <span class="math inline">\(x_i\)</span> is located at <code>X[i,]</code> rather than <code>X[,i]</code>. Similarly the observation <span class="math inline">\(i\)</span> from a 3d object <code>Y</code> would be located at <code>Y[i,,]</code>.</p>
-<p>Now we want to set the starting values and shapes for our parameters. We can see from the likelihood equation we have two parameters, the bias <span class="math inline">\(\beta_0\)</span> and the coefficients <span class="math inline">\(\beta\)</span>. We’ll just set these to start from zero. Similar to the data, these are just a list with the relevant names.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get the dimension of X, needed to set shape of params$beta</span>
-d =<span class="st"> </span><span class="kw">ncol</span>(dataset$X)
-params =<span class="st"> </span><span class="kw">list</span>( <span class="st">&quot;bias&quot;</span> =<span class="st"> </span><span class="dv">0</span>, <span class="st">&quot;beta&quot;</span> =<span class="st"> </span><span class="kw">matrix</span>( <span class="kw">rep</span>( <span class="dv">0</span>, d ), <span class="dt">nrow =</span> d ) )</code></pre></div>
-<p>Now we’ll define the functions <code>logLik</code> and <code>logPrior</code>. It should now become clear why the list names come in handy. The function <code>logLik</code> should take two parameters as input: <code>params</code> and <code>dataset</code>. These parameters will be lists with the same names as those you defined for <code>params</code> and <code>dataset</code> earlier. There is one difference though, the objects in the lists will have automatically been converted to <code>TensorFlow</code> objects for you. The <code>params</code> list will contain <code>TensorFlow</code> tensor variables; the <code>dataset</code> list will contain <code>TensorFlow</code> placeholders. The <code>logLik</code> function should take these lists as input and return the value of the log likelihood as a tensor at point <code>params</code> given data <code>dataset</code>. The function should do this using <code>TensorFlow</code> operations, as this allows the gradient to be automatically calculated; it also allows the wide range of distribution objects as well as matrix operations that <code>TensorFlow</code> provides to be taken advantage of. A tutorial of <code>TensorFlow</code> for <code>R</code> is beyond the scope of this article, for more details we refer the reader to the website of <a href="https://tensorflow.rstudio.com/">TensorFlow for R</a>. With this in place we can define the <code>logLik</code> function as follows</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logLik =<span class="st"> </span>function(params, dataset) {
-    yEstimated =<span class="st"> </span><span class="dv">1</span> /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span>tf$<span class="kw">exp</span>( -<span class="st"> </span>tf$<span class="kw">squeeze</span>(params$bias +<span class="st"> </span>tf$<span class="kw">matmul</span>(dataset$X, params$beta))))
-    logLik =<span class="st"> </span>tf$<span class="kw">reduce_sum</span>(dataset$y *<span class="st"> </span>tf$<span class="kw">log</span>(yEstimated) +<span class="st"> </span>(<span class="dv">1</span> -<span class="st"> </span>dataset$y) *<span class="st"> </span>tf$<span class="kw">log</span>(<span class="dv">1</span> -<span class="st"> </span>yEstimated))
-    <span class="kw">return</span>(logLik)
-}</code></pre></div>
-<p>Next we want to define our log-prior density, we assume each <span class="math inline">\(\beta_i\)</span> has an independent Laplace prior distribution, with location 0 and scale 1, so that <span class="math inline">\(\log p( \beta ) = - \sum_{i=0}^d | \beta_i|\)</span>. Similar to the log-likelihood function, the log-prior density is defined as a function with input <code>params</code>. In our case the definition is</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">logPrior =<span class="st"> </span>function(params) {
-    logPrior =<span class="st"> </span>-<span class="st"> </span>(tf$<span class="kw">reduce_sum</span>(tf$<span class="kw">abs</span>(params$beta)) +<span class="st"> </span>tf$<span class="kw">reduce_sum</span>(tf$<span class="kw">abs</span>(params$bias)))
-    <span class="kw">return</span>(logPrior)
-}</code></pre></div>
-<p>Finally, we’ll set the stepsize parameters for the algorithm, along with the minibatch size. <code>sgldcv</code> relies on two stepsize parameters, one for the optimization step and one for the MCMC step. To allow stepsizes to be set for different parameters, the form of the stepsizes for the MCMC will be lists with names corresponding to each of the names in <code>params</code>. The optimization step will just be one value as the stepsize is automatically tuned</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stepsizesMCMC =<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;beta&quot;</span> =<span class="st"> </span><span class="fl">5e-6</span>, <span class="st">&quot;bias&quot;</span> =<span class="st"> </span><span class="fl">5e-6</span>)
-stepsizesOptimization =<span class="st"> </span><span class="fl">5e-6</span></code></pre></div>
+\]</p>
+
+<p>First let&#39;s load in the data, we will use the <a href="https://archive.ics.uci.edu/ml/datasets/covertype">cover type dataset</a> commonly used to benchmark classification models. We use the <a href="https://www.csie.ntu.edu.tw/%7Ecjlin/libsvmtools/datasets/binary.html">dataset from LIBSVM</a>, which transforms the problem from multiclass to binary. The covertype dataset can be downloaded using the <code>sgmcmc</code> function <code>getDataset</code> as follows:</p>
+
+<pre><code class="r">library(sgmcmc)
+# Download and load covertype dataset
+covertype = getDataset(&quot;covertype&quot;)
+</code></pre>
+
+<p>First we&#39;ll remove about 10000 observations from the original dataset to form a test set, this will be used to check the validity of the algorithm. Then we&#39;ll separate out the response variable <code>y</code> and the explanatory variables <code>X</code>. The response variable is the first column in the dataset.</p>
+
+<pre><code class="r">set.seed(13)
+testObservations = sample(nrow(covertype), 10^4)
+testSet = covertype[testObservations,]
+X = covertype[-c(testObservations),2:ncol(covertype)]
+y = covertype[-c(testObservations),1]
+dataset = list( &quot;X&quot; = X, &quot;y&quot; = y )
+</code></pre>
+
+<p>In the last line we defined the dataset as it will be input to the relevant <code>sgmcmc</code> function. A lot of the inputs to functions in <code>sgmcmc</code> are defined as lists. This improves flexibility by enabling models to be specified with multiple parameters, datasets and allows separate tuning constants to be set for each parameter. We assume that observations are always accessed on the first dimension of each object, i.e. the point \(x_i\) is located at <code>X[i,]</code> rather than <code>X[,i]</code>. Similarly the observation \(i\) from a 3d object <code>Y</code> would be located at <code>Y[i,,]</code>.</p>
+
+<p>Now we want to set the starting values and shapes for our parameters. We can see from the likelihood equation we have two parameters, the bias \(\beta_0\) and the coefficients \(\beta\). We&#39;ll just set these to start from zero. Similar to the data, these are just a list with the relevant names.</p>
+
+<pre><code class="r"># Get the dimension of X, needed to set shape of params$beta
+d = ncol(dataset$X)
+params = list( &quot;bias&quot; = 0, &quot;beta&quot; = matrix( rep( 0, d ), nrow = d ) )
+</code></pre>
+
+<p>Now we&#39;ll define the functions <code>logLik</code> and <code>logPrior</code>. It should now become clear why the list names come in handy. The function <code>logLik</code> should take two parameters as input: <code>params</code> and <code>dataset</code>. These parameters will be lists with the same names as those you defined for <code>params</code> and <code>dataset</code> earlier. There is one difference though, the objects in the lists will have automatically been converted to <code>TensorFlow</code> objects for you. The <code>params</code> list will contain <code>TensorFlow</code> tensor variables; the <code>dataset</code> list will contain <code>TensorFlow</code> placeholders. The <code>logLik</code> function should take these lists as input and return the value of the log likelihood as a tensor at point <code>params</code> given data <code>dataset</code>. The function should do this using <code>TensorFlow</code> operations, as this allows the gradient to be automatically calculated; it also allows the wide range of distribution objects as well as matrix operations that <code>TensorFlow</code> provides to be taken advantage of. A tutorial of <code>TensorFlow</code> for <code>R</code> is beyond the scope of this article, for more details we refer the reader to the website of <a href="https://tensorflow.rstudio.com/">TensorFlow for R</a>. With this in place we can define the <code>logLik</code> function as follows</p>
+
+<pre><code class="r">logLik = function(params, dataset) {
+    yEstimated = 1 / (1 + tf$exp( - tf$squeeze(params$bias + tf$matmul(dataset$X, params$beta))))
+    logLik = tf$reduce_sum(dataset$y * tf$log(yEstimated) + (1 - dataset$y) * tf$log(1 - yEstimated))
+    return(logLik)
+}
+</code></pre>
+
+<p>Next we want to define our log-prior density, we assume each \(\beta_i\) has an independent Laplace prior distribution, with location 0 and scale 1, so that \(\log p( \beta ) = - \sum_{i=0}^d | \beta_i|\). Similar to the log-likelihood function, the log-prior density is defined as a function with input <code>params</code>. In our case the definition is</p>
+
+<pre><code class="r">logPrior = function(params) {
+    logPrior = - (tf$reduce_sum(tf$abs(params$beta)) + tf$reduce_sum(tf$abs(params$bias)))
+    return(logPrior)
+}
+</code></pre>
+
+<p>Finally, we&#39;ll set the stepsize parameters for the algorithm, along with the minibatch size. <code>sgldcv</code> relies on two stepsize parameters, one for the optimization step and one for the MCMC step. To allow stepsizes to be set for different parameters, the form of the stepsizes for the MCMC will be lists with names corresponding to each of the names in <code>params</code>. The optimization step will just be one value as the stepsize is automatically tuned</p>
+
+<pre><code class="r">stepsizesMCMC = list(&quot;beta&quot; = 5e-6, &quot;bias&quot; = 5e-6)
+stepsizesOptimization = 5e-6
+</code></pre>
+
 <p>Alternatively, we can simply use the shortcut <code>stepsizesMCMC = 2e-5</code> which would set the stepsizes for each parameter to <code>2e-5</code>. The optimization step is performed using the <code>TensorFlow</code> <code>AdamOptimizer</code>.</p>
-<p>Now we can run our SGLD-CV algorithm using the function <code>sgldcv</code> from the <code>sgmcmc</code> package, which returns a list of Markov chains for each parameter as output. Use the argument <code>verbose = FALSE</code> to hide the output of the function. To make the results reproducible we’ll set the seed to 13. As the dataset size is quite large, we’ll change the <code>minibatchSize</code> from its default <code>0.01 * N</code> to <code>500</code>. To allow a small 1000 iteration burn-in we’ll set the number of iterations to be 11000</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">output =<span class="st"> </span><span class="kw">sgldcv</span>(logLik, dataset, params, stepsizesMCMC, stepsizesOptimization, <span class="dt">logPrior =</span> logPrior, 
-        <span class="dt">minibatchSize =</span> <span class="dv">500</span>, <span class="dt">nIters =</span> <span class="dv">11000</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>, <span class="dt">seed =</span> <span class="dv">13</span> ) </code></pre></div>
-<p>A common performance measure for a classifier is the <a href="https://www.kaggle.com/wiki/LogLoss">log loss</a>. To check the algorithm converged, we’ll plot the log loss of the data from our test set every 10 iterations. Let <span class="math display">\[\hat \pi_i^{(j)} := \frac{1}{1 + \exp\left[-\beta_0^{(j)} - \mathbf x_i \beta^{(j)}\right]},\]</span> here <span class="math inline">\(\hat \pi_i^{(j)}\)</span> denotes the probability that the <span class="math inline">\(j^{\text{th}}\)</span> iteration of our MCMC chain assigned to observation <span class="math inline">\(i\)</span> is in our test set. Define our test set by <span class="math inline">\(T\)</span>, the log loss is given by <span class="math display">\[A := \frac{1}{|T|} \sum_{y_i \in T} \left[ y_i \log \hat \pi_i^{(j)} + (1 - y_i) \log(1 - \hat \pi_i^{(j)}) \right]\]</span></p>
-<p>To check convergence, we’ll plot the log loss every 10 iterations as follows</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">yTest =<span class="st"> </span>testSet[,<span class="dv">1</span>]
-XTest =<span class="st"> </span>testSet[,<span class="dv">2</span>:<span class="kw">ncol</span>(testSet)]
-<span class="co"># Remove burn-in</span>
-output$bias =<span class="st"> </span>output$bias[-<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">1000</span>)]
-output$beta =<span class="st"> </span>output$beta[-<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">1000</span>),,]
-iterations =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">1</span>, <span class="dt">to =</span> <span class="dv">10</span>^<span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">10</span>)
-logLoss =<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(iterations))
-<span class="co"># Calculate log loss every 10 iterations</span>
-for ( iter in <span class="dv">1</span>:<span class="kw">length</span>(iterations) ) {
-    j =<span class="st"> </span>iterations[iter]
-    <span class="co"># Get parameters at iteration j</span>
-    beta0_j =<span class="st"> </span>output$bias[j]
-    beta_j =<span class="st"> </span>output$beta[j,]
-    for ( i in <span class="dv">1</span>:<span class="kw">length</span>(yTest) ) {
-        pihat_ij =<span class="st"> </span><span class="dv">1</span> /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>(-<span class="st"> </span>beta0_j -<span class="st"> </span><span class="kw">sum</span>(XTest[i,] *<span class="st"> </span>beta_j)))
-        y_i =<span class="st"> </span>yTest[i]
-        <span class="co"># Calculate log loss at current test set point</span>
-        LogPred_curr =<span class="st"> </span>-<span class="st"> </span>(y_i *<span class="st"> </span><span class="kw">log</span>(pihat_ij) +<span class="st"> </span>(<span class="dv">1</span> -<span class="st"> </span>y_i) *<span class="st"> </span><span class="kw">log</span>(<span class="dv">1</span> -<span class="st"> </span>pihat_ij))
-        logLoss[iter] =<span class="st"> </span>logLoss[iter] +<span class="st"> </span><span class="dv">1</span> /<span class="st"> </span><span class="kw">length</span>(yTest) *<span class="st"> </span>LogPred_curr
+
+<p>Now we can run our SGLD-CV algorithm using the function <code>sgldcv</code> from the <code>sgmcmc</code> package, which returns a list of Markov chains for each parameter as output. Use the argument <code>verbose = FALSE</code> to hide the output of the function. To make the results reproducible we&#39;ll set the seed to 13. As the dataset size is quite large, we&#39;ll change the <code>minibatchSize</code> from its default <code>0.01 * N</code> to <code>500</code>. To allow a small 1000 iteration burn-in we&#39;ll set the number of iterations to be 11000</p>
+
+<pre><code class="r">output = sgldcv(logLik, dataset, params, stepsizesMCMC, stepsizesOptimization, logPrior = logPrior, 
+        minibatchSize = 500, nIters = 11000, verbose = FALSE, seed = 13 ) 
+</code></pre>
+
+<p>A common performance measure for a classifier is the <a href="https://www.kaggle.com/wiki/LogLoss">log loss</a>. To check the algorithm converged, we&#39;ll plot the log loss of the data from our test set every 10 iterations. Let \[\hat \pi_i^{(j)} := \frac{1}{1 + \exp\left[-\beta_0^{(j)} - \mathbf x_i \beta^{(j)}\right]},\]
+here \(\hat \pi_i^{(j)}\) denotes the probability that the \(j^{\text{th}}\) iteration of our MCMC chain assigned to observation \(i\) is in our test set. Define our test set by \(T\), the log loss is given by
+\[A := \frac{1}{|T|} \sum_{y_i \in T} \left[ y_i \log \hat \pi_i^{(j)} + (1 - y_i) \log(1 - \hat \pi_i^{(j)}) \right]\]</p>
+
+<p>To check convergence, we&#39;ll plot the log loss every 10 iterations as follows</p>
+
+<pre><code class="r">yTest = testSet[,1]
+XTest = testSet[,2:ncol(testSet)]
+# Remove burn-in
+output$bias = output$bias[-c(1:1000)]
+output$beta = output$beta[-c(1:1000),,]
+iterations = seq(from = 1, to = 10^4, by = 10)
+logLoss = rep(0, length(iterations))
+# Calculate log loss every 10 iterations
+for ( iter in 1:length(iterations) ) {
+    j = iterations[iter]
+    # Get parameters at iteration j
+    beta0_j = output$bias[j]
+    beta_j = output$beta[j,]
+    for ( i in 1:length(yTest) ) {
+        pihat_ij = 1 / (1 + exp(- beta0_j - sum(XTest[i,] * beta_j)))
+        y_i = yTest[i]
+        # Calculate log loss at current test set point
+        LogPred_curr = - (y_i * log(pihat_ij) + (1 - y_i) * log(1 - pihat_ij))
+        logLoss[iter] = logLoss[iter] + 1 / length(yTest) * LogPred_curr
     }
 }
-<span class="kw">library</span>(ggplot2)
-plotFrame =<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;iteration&quot;</span> =<span class="st"> </span>iterations, <span class="st">&quot;logLoss&quot;</span> =<span class="st"> </span>logLoss)
-<span class="kw">ggplot</span>(plotFrame, <span class="kw">aes</span>(<span class="dt">x =</span> iteration, <span class="dt">y =</span> logLoss)) +
-<span class="st">    </span><span class="kw">geom_line</span>() +
-<span class="st">    </span><span class="kw">ylab</span>(<span class="st">&quot;Log loss of test set&quot;</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><!-- --></p>
+library(ggplot2)
+plotFrame = data.frame(&quot;iteration&quot; = iterations, &quot;logLoss&quot; = logLoss)
+ggplot(plotFrame, aes(x = iteration, y = logLoss)) +
+    geom_line() +
+    ylab(&quot;Log loss of test set&quot;)
+</code></pre>
 
-
-
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
+<pre><code>## Not all tensorflow dependencies are met so skipping this...
+## Try running tensorflow::install_tensorflow().
+</code></pre>
 
 </body>
+
 </html>
