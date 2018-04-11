@@ -15,7 +15,7 @@
 #  logLik = function(params, dataset) {
 #      # Declare distribution, assuming Sigma known and constant
 #      SigmaDiag = c( 1, 1 )
-#      distn = tf$contrib$distributions$MultivariateNormalDiag(params$theta, SigmaDiag)
+#      distn = tf$distributions$MultivariateNormalDiag(params$theta, SigmaDiag)
 #      # Return sum of log pdf
 #      return(tf$reduce_sum(distn$log_prob(dataset$X)))
 #  }
@@ -23,7 +23,7 @@
 #  # Declare log prior
 #  logPrior = function(params) {
 #      # Declare prior distribution
-#      distn = tf$contrib$distributions$StudentT(3, 0, 1)
+#      distn = tf$distributions$StudentT(3, 0, 1)
 #      # Apply log prior componentwise and return sum
 #      return(tf$reduce_sum(distn$log_prob(params$theta)))
 #  }

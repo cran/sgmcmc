@@ -17,7 +17,7 @@ params = list( "theta" = c( 0, 0 ) )
 logLik = function( params, dataset ) {
     # Declare distribution of each observation
     SigmaDiag = c( 1, 1 )
-    baseDist = tf$contrib$distributions$MultivariateNormalDiag( params$theta, SigmaDiag )
+    baseDist = tf$distributions$MultivariateNormalDiag( params$theta, SigmaDiag )
     # Declare log-likelihood function and return
     logLik = tf$reduce_sum( baseDist$log_prob( dataset$X ) )
     return( logLik )
@@ -25,7 +25,7 @@ logLik = function( params, dataset ) {
 
 ## ------------------------------------------------------------------------
 logPrior = function( params ) {
-    baseDist = tf$contrib$distributions$Normal( 0, 10 )
+    baseDist = tf$distributions$Normal( 0, 10 )
     logPrior = tf$reduce_sum( baseDist$log_prob( params$theta ) )
     return( logPrior )
 }
