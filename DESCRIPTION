@@ -1,7 +1,7 @@
 Package: sgmcmc
 Type: Package
 Title: Stochastic Gradient Markov Chain Monte Carlo
-Version: 0.2.2
+Version: 0.2.3
 Authors@R: c(
     person("Jack", "Baker", email = "j.baker1@lancaster.ac.uk", role = c("aut", "cre", "cph")),
     person( "Christopher", "Nemeth", role = c("aut", "cph") ), 
@@ -12,8 +12,10 @@ Description: Provides functions that performs popular stochastic gradient Markov
 License: GPL-3
 Encoding: UTF-8
 Depends: R (>= 3.0), tensorflow
-Imports: utils
-SystemRequirements: TensorFlow (https://www.tensorflow.org/)
+Imports: utils, reticulate
+SystemRequirements: TensorFlow (https://www.tensorflow.org/),
+        TensorFlow Probability
+        (https://www.tensorflow.org/probability/)
 Suggests: testthat, MASS, knitr, ggplot2, rmarkdown
 LazyData: true
 VignetteBuilder: knitr
@@ -21,7 +23,7 @@ RoxygenNote: 6.0.1
 URL: https://github.com/STOR-i/sgmcmc
 BugReports: https://github.com/STOR-i/sgmcmc/issues
 NeedsCompilation: no
-Packaged: 2018-04-11 16:15:51 UTC; jbaker
+Packaged: 2018-09-14 14:39:45 UTC; jbaker
 Author: Jack Baker [aut, cre, cph],
   Christopher Nemeth [aut, cph],
   Paul Fearnhead [aut, cph],
@@ -29,4 +31,4 @@ Author: Jack Baker [aut, cre, cph],
   STOR-i [cph]
 Maintainer: Jack Baker <j.baker1@lancaster.ac.uk>
 Repository: CRAN
-Date/Publication: 2018-04-11 16:52:28 UTC
+Date/Publication: 2018-09-14 15:10:03 UTC

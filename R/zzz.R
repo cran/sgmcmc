@@ -1,28 +1,52 @@
-# Add the contents of tf$contrib$distributions to tf$distributions.
-# This should make creating logLik and logPrior functions much cleaner!
+# Environment determining status of the TensorFlow Installation.
+# This allows a custom error message to be displayed.
+tf_status <- new.env()
+
+
+# Load TensorFlow Probability and add the contents to tf$distributions.
 .onLoad <- function(libname, pkgname) {
-    # If tensorflow not built properly, (e.g. in CRAN build_win) skip this step
-    tryCatch({
-        # Change verbosity level so as not to display deprecation errors while moving objects
-        defaultLogger <- tf$logging$get_verbosity()
-        tf$logging$set_verbosity(tf$logging$ERROR)
-        extra_distns <- names(tf$contrib$distributions)
-        if (is.element("distributions", names(tf))) {
-            current_distns = names(tf$distributions)
-        } else {
-            # If tf$distributions does not exist, create it!
-            tf$distributions = list()
-            current_distns = NULL
-        }
-        current_distns <- names(tf$distributions)
-        for (distn in extra_distns) {
-            # If the distribution name is not in tf$distributions, add it to the Module
-            if (!(distn %in% current_distns)) {
-                tf$distributions[[distn]] <- tf$contrib$distributions[[distn]]
-            }
-        }
-        # Reset verbosity to standard levels
-        tf$logging$set_verbosity(defaultLogger)
-    }, error = function (e) {
-    })
+    # Set default tf_status that everything is installed correctly.
+    assign("TF", TRUE, envir = tf_status)
+    assign("TFP", TRUE, envir = tf_status)
+    # Check TensorFlow is installed. Update tf_status accordingly.
+    checkTF()
+    # If checkTF was not successful, return to avoid printing multiple messages
+    if (!get("TF", envir = tf_status)) {
+        return()
+    }
+    # Check TensorFlow Probability is installed, and load in. Update tf_status accordingly.
+    tryCatch(loadTFP(), error = function(e) tfpMissing(e))
+}
+
+
+# Check tensorflow installed by doing a dummy operation that will throw an error
+checkTF = function() {
+    tryCatch(temp <- tf$constant(4),
+            error = function (e) tfMissing())
+}
+
+
+# Load tensorflow probability and assign distns to tf$distributions.
+# If this fails, print message and update tf_status
+loadTFP <- function() {
+    import_opts <- list(priority = 5, environment = "r-tensorflow")
+    tfp <- reticulate::import("tensorflow_probability", delay_load = import_opts)
+    tf$distributions <- tfp$distributions
+}
+
+
+# Build message if TensorFlow missing. Update tf_status
+tfMissing <- function() {
+    message("\nNo TensorFlow python installation found.")
+    message("This can be installed using the installTF() function.\n")
+    assign("TF", FALSE, envir = tf_status)
+    assign("TFP", FALSE, envir = tf_status)
+}
+
+
+# Build message if TensorFlow Probability missing. Update tf_status
+tfpMissing <- function(e) {
+    message("\nNo TensorFlow Probability python installation found.")
+    message("This can be installed using the installTF() function.\n")
+    assign("TFP", FALSE, envir = tf_status)
 }
