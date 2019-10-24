@@ -13,10 +13,24 @@ To cite the `sgmcmc` package, please reference the [accompanying paper](https://
 
 ```
 @article{sgmcmc-package,
-  title={sgmcmc: An R package for stochastic gradient Markov chain Monte Carlo},
-  author={Baker, Jack and Fearnhead, Paul and Fox, Emily B and Nemeth, Christopher},
-  journal={Journal of Statistical Software (to appear)},
-  year={2019}
+  title        = "{sgmcmc}: An {R} Package for Stochastic Gradient {M}arkov Chain {M}onte {C}arlo",
+  author       = c(person(given = "Jack",
+                          family = "Baker",
+                          email = "jackbaker92@mail.com"),
+                   person(given = "Christopher",
+                          family = "Nemeth",
+                          email = "c.nemeth@lancaster.ac.uk"),
+                   person(given = "Paul",
+                          family = "Fearnhead",
+                          email = "p.fearnhead@lancaster.ac.uk"),
+                   person(given = c("Emily", "B."),
+                          family = "Fox")),
+  journal      = "Journal of Statistical Software",
+  year         = "2019",
+  volume       = "91",
+  number       = "3",
+  pages        = "1--27",
+  doi          = "10.18637/jss.v091.i03"
 }
 ```
 
